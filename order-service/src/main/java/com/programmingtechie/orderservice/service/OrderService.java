@@ -1,6 +1,7 @@
 package com.programmingtechie.orderservice.service;
 
 import com.programmingtechie.orderservice.dto.InventoryResponse;
+import com.programmingtechie.orderservice.dto.OrderDto;
 import com.programmingtechie.orderservice.dto.OrderLineItemsDto;
 import com.programmingtechie.orderservice.dto.OrderRequest;
 import com.programmingtechie.orderservice.model.Order;
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -59,12 +61,25 @@ public class OrderService {
         }
     }
 
+    public List<OrderDto> getOrders() {
+        return orderRepository.findAll().stream()
+                .map(this::mapToOrderDto).toList();
+    }
+
     private OrderLineItems mapToDto(OrderLineItemsDto orderLineItemsDto) {
         OrderLineItems orderLineItems = new OrderLineItems();
         orderLineItems.setPrice(orderLineItemsDto.getPrice());
         orderLineItems.setQuantity(orderLineItemsDto.getQuantity());
-        orderLineItems.setSkuCode(orderLineItems.getSkuCode());
+        orderLineItems.setSkuCode(orderLineItemsDto.getSkuCode());
 
         return orderLineItems;
+    }
+
+    private OrderDto mapToOrderDto(Order order) {
+
+        return OrderDto.builder()
+                .id(order.getId())
+                .orderNumber(order.getOrderNumber())
+                .build();
     }
 }

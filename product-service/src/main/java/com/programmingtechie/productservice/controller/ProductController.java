@@ -30,7 +30,7 @@ public class ProductController {
     }
 
     @GetMapping
-    @ResponseStatus
+    @ResponseStatus(HttpStatus.OK)
     public List<ProductResponse> getAllProducts() {
         return productService.getAllProducts();
     }
