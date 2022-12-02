@@ -27,7 +27,7 @@ public class OrderService {
         this.webClientBuilder = webClientBuilder;
     }
 
-    public void placeOrder(OrderRequest orderRequest) {
+    public String placeOrder(OrderRequest orderRequest) {
         Order order = new Order();
         order.setOrderNumber(UUID.randomUUID().toString());
 
@@ -44,7 +44,7 @@ public class OrderService {
         // Call inventory service and place order if product is in
 
         var inventoryResponses = webClientBuilder.build().get()
-                .uri("http://inventory-service/api/inventory/",
+                .uri("http://inventory-service/api/inventory/isinstock/",
                         uriBuilder -> uriBuilder.queryParam("skuCode", skuCodes).build())
                 .retrieve()
                 .bodyToMono(InventoryResponse[].class)
@@ -56,6 +56,7 @@ public class OrderService {
 
         if (Boolean.TRUE.equals(result)) {
             orderRepository.save(order);
+            return "Order places successfully";
         } else {
             throw new IllegalArgumentException("product is not in the stock");
         }
