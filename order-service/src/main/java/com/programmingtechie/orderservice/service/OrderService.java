@@ -7,6 +7,8 @@ import com.programmingtechie.orderservice.dto.OrderRequest;
 import com.programmingtechie.orderservice.model.Order;
 import com.programmingtechie.orderservice.model.OrderLineItems;
 import com.programmingtechie.orderservice.repository.OrderRepository;
+import org.springframework.cloud.sleuth.Span;
+import org.springframework.cloud.sleuth.Tracer;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -21,10 +23,12 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final WebClient.Builder webClientBuilder;
+    private final Tracer tracer;
 
-    public OrderService(OrderRepository orderRepository, WebClient.Builder webClientBuilder) {
+    public OrderService(OrderRepository orderRepository, WebClient.Builder webClientBuilder, Tracer tracer) {
         this.orderRepository = orderRepository;
         this.webClientBuilder = webClientBuilder;
+        this.tracer = tracer;
     }
 
     public String placeOrder(OrderRequest orderRequest) {
@@ -41,24 +45,30 @@ public class OrderService {
                 .map(OrderLineItems::getSkuCode)
                 .toList();
 
-        // Call inventory service and place order if product is in
 
-        var inventoryResponses = webClientBuilder.build().get()
-                .uri("http://inventory-service/api/inventory/isinstock/",
-                        uriBuilder -> uriBuilder.queryParam("skuCode", skuCodes).build())
-                .retrieve()
-                .bodyToMono(InventoryResponse[].class)
-                .block();
+        Span inventoryServiceSpan = tracer.nextSpan().name("InventoryServiceSpan");
 
-        assert inventoryResponses != null;
-        var result = Arrays.stream(inventoryResponses)
-                .allMatch(InventoryResponse::getIsInStock);
+        try (Tracer.SpanInScope spanInScope = tracer.withSpan(inventoryServiceSpan)) {
+            // Call inventory service and place order if product is in
+            var inventoryResponses = webClientBuilder.build().get()
+                    .uri("http://inventory-service/api/inventory/isinstock/",
+                            uriBuilder -> uriBuilder.queryParam("skuCode", skuCodes).build())
+                    .retrieve()
+                    .bodyToMono(InventoryResponse[].class)
+                    .block();
 
-        if (Boolean.TRUE.equals(result)) {
-            orderRepository.save(order);
-            return "Order places successfully";
-        } else {
-            throw new IllegalArgumentException("product is not in the stock");
+            assert inventoryResponses != null;
+            var result = Arrays.stream(inventoryResponses)
+                    .allMatch(InventoryResponse::getIsInStock);
+
+            if (Boolean.TRUE.equals(result)) {
+                orderRepository.save(order);
+                return "Order places successfully";
+            } else {
+                throw new IllegalArgumentException("product is not in the stock");
+            }
+        } finally {
+            inventoryServiceSpan.end();
         }
     }
 

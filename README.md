@@ -25,3 +25,9 @@ Configuration options:
 - Scope: openid offline_access
 - Client Authentication: Send as Basic Auth header
 - Get New Access token -> Use token
+
+### Zipkin usage
+
+```
+    docker run -d -p 9411:9411 openzipkin/zipkin
+```
