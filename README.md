@@ -31,3 +31,9 @@ Configuration options:
 ```
     docker run -d -p 9411:9411 openzipkin/zipkin
 ```
+
+## Kafka in docker compose
+
+```
+    docker compose up -d
+```
