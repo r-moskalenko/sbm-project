@@ -1,4 +1,4 @@
-package com.programmingtechie.orderservice.model;
+package com.soa.labs.orderservice.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

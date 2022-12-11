@@ -68,7 +68,7 @@ services:
       DB_USER: keycloak
       DB_PASSWORD: password
       KEYCLOAK_ADMIN: admin
-      KEYCLOAK_PASSWORD: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
     ports:
       - "8080:8080"
     volumes:
@@ -111,7 +111,7 @@ services:
 
 # Eureka server
   discovery-service:
-    container_name: dicovery-service
+    container_name: discovery-service
     image: sbm-discovery-service
     ports:
       - "8761:8761"
@@ -166,14 +166,13 @@ services:
     image: sbm-inventory-service
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql-inventory:5432/inventory-service
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-inventory:5432/inventory-service
     depends_on:
       - postgres-inventory
       - discovery-service
       - gateway-service
 
 # Notification Service Docker Compose Config
-
   notification-service:
     container_name: notification-service
     image: sbm-notification-service

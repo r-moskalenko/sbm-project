@@ -1,13 +1,13 @@
-package com.programmingtechie.orderservice.service;
+package com.soa.labs.orderservice.service;
 
-import com.programmingtechie.orderservice.dto.InventoryResponse;
-import com.programmingtechie.orderservice.dto.OrderDto;
-import com.programmingtechie.orderservice.dto.OrderLineItemsDto;
-import com.programmingtechie.orderservice.dto.OrderRequest;
-import com.programmingtechie.orderservice.event.OrderPlacedEvent;
-import com.programmingtechie.orderservice.model.Order;
-import com.programmingtechie.orderservice.model.OrderLineItems;
-import com.programmingtechie.orderservice.repository.OrderRepository;
+import com.soa.labs.orderservice.dto.InventoryResponse;
+import com.soa.labs.orderservice.dto.OrderDto;
+import com.soa.labs.orderservice.dto.OrderLineItemsDto;
+import com.soa.labs.orderservice.dto.OrderRequest;
+import com.soa.labs.orderservice.event.OrderPlacedEvent;
+import com.soa.labs.orderservice.model.Order;
+import com.soa.labs.orderservice.model.OrderLineItems;
+import com.soa.labs.orderservice.repository.OrderRepository;
 import org.springframework.cloud.sleuth.Span;
 import org.springframework.cloud.sleuth.Tracer;
 import org.springframework.kafka.core.KafkaTemplate;

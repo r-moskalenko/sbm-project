@@ -1,15 +1,12 @@
-package com.programmingtechie.orderservice.dto;
+package com.soa.labs.notificationservice.event;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class OrderDto {
-    private Long id;
+public class OrderPlacedEvent {
     private String orderNumber;
 }

@@ -1,4 +1,4 @@
-package com.soa.labs.notificationservice;
+package com.soa.labs.orderservice.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

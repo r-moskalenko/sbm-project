@@ -2,5 +2,11 @@ target/
 .mvn/
 .idea/
 
+mongo-data/
+mysql_keycloak_data/
+postgres-inventory/
+postgres-order/
+
+
 mvnw
 mvnw.cmd
