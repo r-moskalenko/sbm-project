@@ -33,6 +33,26 @@ services:
       - "5432:5432"
     restart: unless-stopped
 
+  postgres-gateway:
+    container_name: postgres-gateway
+    image: postgres
+    environment:
+      POSTGRES_DB: rate_limit
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: 1111
+      PGDATA: /data/postgres
+    volumes:
+      - ./postgres-gateway:/data/postgres
+    ports:
+      - "5433:5433"
+    command: -p 5433
+    restart: unless-stopped
+
+  redis:
+    image: redis
+    ports:
+      - "6378:6379"
+
   # Mongo Docker Compose config
   mongo:
     container_name: mongo
@@ -134,6 +154,8 @@ services:
       - zipkin
       - discovery-service
       - keycloak
+      - postgres-gateway
+      - redis
 
 # Product Service Docker Compose config
   product-service:
