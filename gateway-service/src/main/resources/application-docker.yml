@@ -16,13 +16,13 @@ spring:
     base-url: http://zipkin:9411
 
   r2dbc:
-    url: r2dbc:postgresql://postgres:5433/rate_limit
+    url: r2dbc:postgresql://postgres-gateway:5433/postgres
     username: admin
     password: 1111
 
   redis:
     host: redis
-    port: 6378
+    port: 6379
     client-type: lettuce
 
   autoconfigure:
@@ -46,7 +46,12 @@ spring:
           predicates:
             - name: Path
               args:
-                patterns: /api/order
+                patterns: "/api/order"
+          filters:
+            - name: RequestRateLimiter
+              args:
+                rate-limiter: "#{@apiRateLimiter}"
+                key-resolver: "#{@apiRateLimiterKeyResolver}"
 
         - id: inventory-service
           uri: lb://inventory-service

@@ -5,3 +5,9 @@ CREATE TABLE IF NOT EXISTS api_limiter
     threshold integer,
     ttl integer,
     active boolean);
+
+insert into api_limiter (path, method, threshold, ttl, active) values
+    ('/get', 'GET', 2, 5, true);
+
+insert into api_limiter (path, method, threshold, ttl, active) values
+    ('/api/order', 'GET', 2, 5, true);
