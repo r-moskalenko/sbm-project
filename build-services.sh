@@ -16,3 +16,6 @@ docker build -t sbm-order-service ./order-service/
 
 docker rmi --force sbm-product-service
 docker build -t sbm-product-service ./product-service/
+
+docker rmi --force sbm-flask-service
+docker build -t sbm-flask-service ./flask-service/

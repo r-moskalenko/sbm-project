@@ -86,3 +86,10 @@ spring:
               args:
                 rate-limiter: "#{@apiRateLimiter}"
                 key-resolver: "#{@apiRateLimiterKeyResolver}"
+
+        - id: flask-service
+          uri: http://flask-service:5000
+          predicates:
+            - name: Path
+              args:
+                patterns: /api/flask/hello

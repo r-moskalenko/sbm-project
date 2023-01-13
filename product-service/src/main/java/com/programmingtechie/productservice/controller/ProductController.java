@@ -1,5 +1,6 @@
 package com.programmingtechie.productservice.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.programmingtechie.productservice.dto.ProductRequest;
 import com.programmingtechie.productservice.dto.ProductResponse;
 import com.programmingtechie.productservice.service.ProductService;
@@ -25,7 +26,7 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void createProduct(@RequestBody ProductRequest productRequest) {
+    public void createProduct(@RequestBody ProductRequest productRequest) throws JsonProcessingException {
         productService.createProduct(productRequest);
     }
 
